@@ -1,12 +1,13 @@
 package net.ismail.ssp_backend.services;
 
 import lombok.RequiredArgsConstructor;
+import net.ismail.ssp_backend.dtos.PickupRequestDTO;
 import net.ismail.ssp_backend.entities.Gate;
 import net.ismail.ssp_backend.entities.PickupRequest;
 import net.ismail.ssp_backend.entities.Student;
 import net.ismail.ssp_backend.entities.User;
 import net.ismail.ssp_backend.enums.Status;
-import net.ismail.ssp_backend.repositories.GateRepository;
+import net.ismail.ssp_backend.mappers.PickupRequestMapper;
 import net.ismail.ssp_backend.repositories.PickupRequestRepository;
 import net.ismail.ssp_backend.repositories.StudentRepository;
 import net.ismail.ssp_backend.repositories.UserRepository;
@@ -22,10 +23,10 @@ public class PickupRequestServiceImpl implements PickupRequestService {
     private final PickupRequestRepository pickupRepo;
     private final UserRepository userRepo;
     private final StudentRepository studentRepo;
-    private final GateRepository gateRepo;
+    private final PickupRequestMapper pickupRequestMapper;
 
     @Override
-    public PickupRequest createRequest(Long parentId, Long studentId) {
+    public PickupRequestDTO createRequest(Long parentId, Long studentId) {
 
         User parent = userRepo.findById(parentId)
                 .orElseThrow(() -> new RuntimeException("Parent not found"));
@@ -34,6 +35,9 @@ public class PickupRequestServiceImpl implements PickupRequestService {
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         Gate gate = student.getGate();
+        if (gate == null) {
+            throw new RuntimeException("This student has no gate assigned");
+        }
 
         PickupRequest req = new PickupRequest();
         req.setParent(parent);
@@ -42,12 +46,16 @@ public class PickupRequestServiceImpl implements PickupRequestService {
         req.setStatus(Status.PENDING);
         req.setRequestTime(new Date());
 
-        return pickupRepo.save(req);
+        PickupRequest saved = pickupRepo.save(req);
+
+        return pickupRequestMapper.toDTO(saved);
     }
 
     @Override
-    public List<PickupRequest> getRequestsByGate(Long gateId) {
-        return pickupRepo.findByGateId(gateId);
+    public List<PickupRequestDTO> getRequestsByGate(Long gateId) {
+        return pickupRepo.findByGateId(gateId)
+                .stream()
+                .map(pickupRequestMapper::toDTO)
+                .toList();
     }
 }
-

@@ -1,21 +1,20 @@
 package net.ismail.ssp_backend.services;
 
-import net.ismail.ssp_backend.entities.Student;
-
+import net.ismail.ssp_backend.dtos.ParentDTO;
+import net.ismail.ssp_backend.dtos.StudentDTO;
 import java.util.List;
 
 public interface StudentService {
 
-    Student createStudent(Student student);
-    Student updateStudent(Long id, Student student);
+    StudentDTO createStudent(StudentDTO dto);
+
+    StudentDTO updateStudent(StudentDTO dto);
 
     void deleteStudent(Long id);
 
-    Student getStudentById(Long id);
-    List<Student> getAllStudents();
-    List<Student> getStudentsByParent(Long parentId);
+    StudentDTO getStudentById(Long id);
 
+    List<StudentDTO> getAllStudents();
 
-
-
+    ParentDTO getStudentsByParent(Long parentId);
 }

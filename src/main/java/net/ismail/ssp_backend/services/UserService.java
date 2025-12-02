@@ -1,16 +1,17 @@
 package net.ismail.ssp_backend.services;
 
+import net.ismail.ssp_backend.dtos.UserDTO;
 import net.ismail.ssp_backend.entities.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    User createUser(User user);
-    User getUserById(Long id);
-    List<User> getAllUsers();
-    User updateUser(Long id, User userDetails);
+    UserDTO createUser(UserDTO userDTO);
+    UserDTO getUserById(Long id);
+    List<UserDTO> getAllUsers();
+    UserDTO updateUser(UserDTO userDTO);
     void deleteUser(Long id);
-    User findParentByEmail(String email);
-    List<User> findParentByName(String name);
+    UserDTO findParentByEmail(String email);
+    List<UserDTO> findParentByName(String name);
 }

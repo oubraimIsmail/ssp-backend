@@ -1,7 +1,8 @@
 package net.ismail.ssp_backend.controllers;
 
 import lombok.RequiredArgsConstructor;
-import net.ismail.ssp_backend.entities.Student;
+import net.ismail.ssp_backend.dtos.ParentDTO;
+import net.ismail.ssp_backend.dtos.StudentDTO;
 import net.ismail.ssp_backend.services.StudentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +16,14 @@ public class StudentController {
     private final StudentService studentService;
 
     @PostMapping
-    public Student createStudent(@RequestBody Student student) {
-        return studentService.createStudent(student);
+    public StudentDTO createStudent(@RequestBody StudentDTO dto) {
+        return studentService.createStudent(dto);
     }
 
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
-        return studentService.updateStudent(id, student);
+    public StudentDTO updateStudent(@PathVariable Long id, @RequestBody StudentDTO dto) {
+        dto.setId(id);
+        return studentService.updateStudent(dto);
     }
 
     @DeleteMapping("/{id}")
@@ -30,18 +32,19 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
+    public StudentDTO getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id);
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentDTO> getAllStudents() {
         return studentService.getAllStudents();
     }
 
     @GetMapping("/parent/{parentId}")
-    public List<Student> getStudentsByParent(@PathVariable Long parentId) {
+    public ParentDTO getStudentsByParent(@PathVariable Long parentId) {
         return studentService.getStudentsByParent(parentId);
     }
-}
 
+
+}

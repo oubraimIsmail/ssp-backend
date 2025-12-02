@@ -1,7 +1,7 @@
 package net.ismail.ssp_backend.controllers;
 
 import lombok.RequiredArgsConstructor;
-import net.ismail.ssp_backend.entities.Gate;
+import net.ismail.ssp_backend.dtos.GateDTO;
 import net.ismail.ssp_backend.services.GateService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +15,17 @@ public class GateController {
     private final GateService gateService;
 
     @PostMapping
-    public Gate createGate(@RequestBody Gate gate) {
-        return gateService.createGate(gate);
+    public GateDTO createGate(@RequestBody GateDTO gateDTO) {
+        return gateService.createGate(gateDTO);
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteGate(@PathVariable Long id){
+        gateService.deleteGate(id);
     }
 
     @GetMapping
-    public List<Gate> getAllGates() {
+    public List<GateDTO> getAllGates() {
         return gateService.getAllGates();
     }
 }
-

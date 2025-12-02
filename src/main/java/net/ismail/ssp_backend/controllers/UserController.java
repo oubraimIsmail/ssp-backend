@@ -1,8 +1,7 @@
 package net.ismail.ssp_backend.controllers;
 
-
 import lombok.RequiredArgsConstructor;
-import net.ismail.ssp_backend.entities.User;
+import net.ismail.ssp_backend.dtos.UserDTO;
 import net.ismail.ssp_backend.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +15,19 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+        return userService.createUser(userDTO);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        userDTO.setId(id);
+        return userService.updateUser(userDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -36,18 +36,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public UserDTO getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
     @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable String email) {
+    public UserDTO getUserByEmail(@PathVariable String email) {
         return userService.findParentByEmail(email);
     }
 
     @GetMapping("/name/{name}")
-    public List<User> getUserByName(@PathVariable String name) {
+    public List<UserDTO> getUserByName(@PathVariable String name) {
         return userService.findParentByName(name);
     }
 }
-
